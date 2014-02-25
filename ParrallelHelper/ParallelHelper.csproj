@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Call.cs" />
     <Compile Include="OnceFlag.cs" />
+    <Compile Include="OnceFlagSimple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

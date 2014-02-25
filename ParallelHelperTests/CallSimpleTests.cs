@@ -5,14 +5,14 @@ using Xunit;
 
 namespace ParallelHelperTests
 {
-    public class CallTests
+    public class CallSimpleTests
     {
         [Fact]
         public void Once_RunActionOnce_ActionPerformed()
         {
-            var flag = new OnceFlag();
+            var flag = new OnceFlagSimple();
             var wasCalled = false;
-            Call.Once(flag, () => wasCalled = true);
+            Call.OnceSimple(flag, () => wasCalled = true);
 
             Assert.True(wasCalled);
         }
@@ -20,12 +20,12 @@ namespace ParallelHelperTests
         [Fact]
         public void Once_RunActionMAnyTimes_ActionPerformedOnlyOnce()
         {
-            var flag = new OnceFlag();
+            var flag = new OnceFlagSimple();
             var timesCalled = 0;
-            Call.Once(flag, () => timesCalled++);
-            Call.Once(flag, () => timesCalled++);
-            Call.Once(flag, () => timesCalled++);
-            Call.Once(flag, () => timesCalled++);
+            Call.OnceSimple(flag, () => timesCalled++);
+            Call.OnceSimple(flag, () => timesCalled++);
+            Call.OnceSimple(flag, () => timesCalled++);
+            Call.OnceSimple(flag, () => timesCalled++);
 
             Assert.Equal(1, timesCalled);
         }
@@ -33,26 +33,25 @@ namespace ParallelHelperTests
         [Fact]
         public void Once_RunActionTwiceTheFirstThrowAnException_ExceptionPropagedToCallerAndTheSecondExecuted()
         {
-            var flag = new OnceFlag();
+            var flag = new OnceFlagSimple();
 
             var wasCalled = false;
 
             Assert.Throws<ApplicationException>(() =>
-                Call.Once(flag, () =>
+                Call.OnceSimple(flag, () =>
                 {
                     throw new ApplicationException("BOOM!");
                 }));
 
-            Call.Once(flag, () => wasCalled = true);
+            Call.OnceSimple(flag, () => wasCalled = true);
 
             Assert.True(wasCalled);
         }
 
-/*
         [Fact(Timeout = 30000)]
         public void Once_RunActionTwiceTheFirstThrowAnExceptionAfter2ndExcuted_ExceptionPropagedToCallerAndTheSecondExecuted()
         {
-            var flag = new OnceFlag();
+            var flag = new OnceFlagSimple();
 
             var wasCalled = false;
             var insideThread1 = new AutoResetEvent(false);
@@ -61,7 +60,7 @@ namespace ParallelHelperTests
             {
                 try
                 {
-                    Call.Once(flag, () =>
+                    Call.OnceSimple(flag, () =>
                     {
                         insideThread1.Set();
                         insideThread2.WaitOne();
@@ -78,7 +77,7 @@ namespace ParallelHelperTests
             {
                 insideThread2.Set();
 
-                Call.Once(flag, () => wasCalled = true);
+                Call.OnceSimple(flag, () => wasCalled = true);
             });
 
             t2.Start();
@@ -88,6 +87,5 @@ namespace ParallelHelperTests
 
             Assert.True(wasCalled);
         }
-*/
     }
 }
